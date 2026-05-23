@@ -112,9 +112,19 @@ export const tryOnApi = {
   },
 
   async signInAnonymously() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) return session;
     const { data, error } = await supabase.auth.signInAnonymously();
     if (error) throw error;
     return data;
+  },
+
+  async ensureSession() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      await supabase.auth.signInAnonymously();
+    }
+    return session;
   },
 
   async signUp(email: string, password: string) {

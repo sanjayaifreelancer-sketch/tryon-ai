@@ -13,7 +13,7 @@ export default function PlanCard({ plan, selected, onSelect }: PlanCardProps) {
     <TouchableOpacity
       onPress={onSelect}
       activeOpacity={0.9}
-      className={`rounded-2xl p-4 flex flex-col relative ${
+      className={`rounded-2xl p-4 relative ${
         selected
           ? "border-2 border-[#F59E0B] bg-white"
           : "border border-[#E5E7EB] bg-white"

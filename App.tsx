@@ -8,6 +8,7 @@ import BottomTabNavigator from "./src/components/BottomTabNavigator";
 import TryOnScreen from "./src/screens/TryOnScreen";
 import SubscriptionScreen from "./src/screens/SubscriptionScreen";
 import OnboardingScreen from "./src/screens/OnboardingScreen";
+import { tryOnApi } from "./src/services/api";
 
 const ONBOARDING_KEY = "@tryonai_onboarding_complete";
 const Stack = createNativeStackNavigator();
@@ -19,6 +20,7 @@ export default function App() {
     AsyncStorage.getItem(ONBOARDING_KEY).then((value) => {
       setShowOnboarding(value !== "true");
     });
+    tryOnApi.ensureSession().catch(() => {});
   }, []);
 
   const finishOnboarding = useCallback(() => {

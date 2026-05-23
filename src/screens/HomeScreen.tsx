@@ -91,7 +91,7 @@ export default function HomeScreen({ navigation }: any) {
                 className="w-full h-full"
                 resizeMode="cover"
               />
-              <View className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm border border-[#E5E7EB] rounded-full px-4 py-2 flex-row items-center">
+              <View className="absolute bottom-4 right-4 bg-white border border-[#E5E7EB] rounded-full px-4 py-2 flex-row items-center" style={{ opacity: 0.95 }}>
                 <View className="w-2 h-2 rounded-full bg-[#F59E0B]" />
                 <Text className="ml-2 text-xs font-medium text-[#111111]">
                   Ready for fitting

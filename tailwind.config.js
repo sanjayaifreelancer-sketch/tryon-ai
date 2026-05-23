@@ -13,11 +13,8 @@ module.exports = {
         success: "#10B981",
         "border-light": "#E5E7EB",
       },
-      fontFamily: {
-        sans: ["Plus Jakarta Sans", "System"],
-      },
       borderRadius: {
-        card: "16px",
+        card: 16,
       },
     },
   },

@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
-import * as Sharing from "expo-sharing";
 import { tryOnApi } from "../services/api";
 
 export default function TryOnScreen() {
@@ -27,7 +26,7 @@ export default function TryOnScreen() {
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 0.8,
     });
     if (!result.canceled && result.assets[0]) {
@@ -37,7 +36,7 @@ export default function TryOnScreen() {
 
   const pickClothingImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 0.8,
     });
     if (!result.canceled && result.assets[0]) {
@@ -67,12 +66,17 @@ export default function TryOnScreen() {
 
   const handleShare = async () => {
     if (!resultImage) return;
-    const canShare = await Sharing.isAvailableAsync();
-    if (canShare) {
-      await Sharing.shareAsync(resultImage, {
-        mimeType: "image/jpeg",
-        dialogTitle: "Share your try-on",
-      });
+    try {
+      const Sharing = require("expo-sharing");
+      const canShare = await Sharing.isAvailableAsync();
+      if (canShare) {
+        await Sharing.shareAsync(resultImage, {
+          mimeType: "image/jpeg",
+          dialogTitle: "Share your try-on",
+        });
+      }
+    } catch {
+      Alert.alert("Share", "Sharing is not available on this platform.");
     }
   };
 
