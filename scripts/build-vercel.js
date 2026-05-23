@@ -1,20 +1,30 @@
 const fs = require("fs");
 const path = require("path");
 
-const distDir = path.join(__dirname, "..", "dist");
-const publicDir = path.join(__dirname, "..", "public");
+const rootDir = path.join(__dirname, "..");
+const distDir = path.join(rootDir, "dist");
+const publicDir = path.join(rootDir, "public");
 const appDir = path.join(distDir, "app");
 
-// Move Expo web export to /app subdirectory
+// Clean from previous builds
+if (fs.existsSync(appDir)) {
+  fs.rmSync(appDir, { recursive: true, force: true });
+}
+
 if (fs.existsSync(distDir)) {
-  const files = fs.readdirSync(distDir);
+  const entries = fs.readdirSync(distDir);
+  const appIndex = path.join(distDir, "index.html");
+
+  // Move all Expo export files into /app subdirectory
   fs.mkdirSync(appDir, { recursive: true });
 
-  for (const file of files) {
+  for (const file of entries) {
     if (file === "app") continue;
     const src = path.join(distDir, file);
     const dest = path.join(appDir, file);
-    fs.renameSync(src, dest);
+    if (fs.existsSync(src)) {
+      fs.renameSync(src, dest);
+    }
   }
 }
 
