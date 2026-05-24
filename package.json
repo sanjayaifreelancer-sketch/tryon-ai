@@ -10,7 +10,7 @@
     "build:android": "eas build --platform android --profile production",
     "build:android:apk": "eas build --platform android --profile preview",
     "build:ios": "eas build --platform ios --profile production",
-    "build:vercel": "npx expo export --platform web"
+    "build:vercel": "npx expo export --platform web && node scripts/build-vercel.js"
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.1",
