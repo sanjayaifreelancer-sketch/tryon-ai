@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,13 +11,21 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import { tryOnApi } from "../services/api";
+import { trialService } from "../services/trial";
 
-export default function TryOnScreen() {
+export default function TryOnScreen({ navigation }: any) {
   const [userImage, setUserImage] = useState<string | null>(null);
   const [clothingImage, setClothingImage] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [viewMode, setViewMode] = useState<"original" | "result">("original");
+  const [remainingTryOns, setRemainingTryOns] = useState(3);
+  const [isPro, setIsPro] = useState(false);
+
+  useEffect(() => {
+    trialService.remainingTryOns().then(setRemainingTryOns);
+    tryOnApi.isAnonymousUser().then((anon) => setIsPro(!anon));
+  }, []);
 
   const pickUserImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -49,6 +57,22 @@ export default function TryOnScreen() {
       Alert.alert("Missing images", "Please select both a user photo and a clothing item.");
       return;
     }
+
+    if (!isPro) {
+      const expired = await trialService.isTrialExpired();
+      if (expired) {
+        Alert.alert(
+          "Free Trial Ended",
+          "You've used all your free try-ons. Upgrade to Pro for unlimited access!",
+          [
+            { text: "Later", style: "cancel" },
+            { text: "Upgrade", onPress: () => navigation.navigate("Subscription") },
+          ]
+        );
+        return;
+      }
+    }
+
     setLoading(true);
     try {
       const response = await tryOnApi.generateTryOn({
@@ -57,6 +81,11 @@ export default function TryOnScreen() {
       });
       setResultImage(response.resultImage);
       setViewMode("result");
+      if (!isPro) {
+        await trialService.incrementTryOn();
+        const remaining = await trialService.remainingTryOns();
+        setRemainingTryOns(remaining);
+      }
     } catch {
       Alert.alert("Error", "Failed to generate try-on. Please try again.");
     } finally {
@@ -87,9 +116,18 @@ export default function TryOnScreen() {
           <Text className="text-xl">☰</Text>
         </TouchableOpacity>
         <Text className="text-xl font-semibold text-[#111111]">Try On</Text>
-        <TouchableOpacity className="p-2 -mr-2">
-          <Text className="text-xl">🛍</Text>
-        </TouchableOpacity>
+        <View className="flex-row items-center">
+          {!isPro && (
+            <View className="bg-[#FFF7ED] px-2 py-1 rounded-full mr-2">
+              <Text className="text-xs font-semibold text-[#F59E0B]">
+                {remainingTryOns} free
+              </Text>
+            </View>
+          )}
+          <TouchableOpacity className="p-2 -mr-2">
+            <Text className="text-xl">🛍</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView

@@ -8,6 +8,7 @@ import BottomTabNavigator from "./src/components/BottomTabNavigator";
 import TryOnScreen from "./src/screens/TryOnScreen";
 import SubscriptionScreen from "./src/screens/SubscriptionScreen";
 import OnboardingScreen from "./src/screens/OnboardingScreen";
+import AuthScreen from "./src/screens/AuthScreen";
 import { tryOnApi } from "./src/services/api";
 
 const ONBOARDING_KEY = "@tryonai_onboarding_complete";
@@ -46,6 +47,7 @@ export default function App() {
                 <OnboardingScreen
                   {...props}
                   onFinish={finishOnboarding}
+                  onAuth={() => props.navigation.navigate("Auth")}
                 />
               )}
             </Stack.Screen>
@@ -67,6 +69,14 @@ export default function App() {
               />
             </>
           )}
+          <Stack.Screen name="Auth">
+            {(props) => (
+              <AuthScreen
+                onComplete={finishOnboarding}
+                onSkip={finishOnboarding}
+              />
+            )}
+          </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

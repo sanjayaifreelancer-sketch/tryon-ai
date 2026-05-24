@@ -18,11 +18,13 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 interface OnboardingScreenProps {
   navigation: any;
   onFinish: () => void;
+  onAuth: () => void;
 }
 
 export default function OnboardingScreen({
   navigation,
   onFinish,
+  onAuth,
 }: OnboardingScreenProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
@@ -93,21 +95,32 @@ export default function OnboardingScreen({
           }}
         >
           <Text className="text-base font-bold text-white">
-            {isLastSlide ? "Get started" : "Next"}
+            {isLastSlide ? "Try for Free" : "Next"}
           </Text>
           {!isLastSlide && (
             <Text className="text-white text-lg ml-2">→</Text>
           )}
         </TouchableOpacity>
 
-        <TouchableOpacity className="items-center mt-5" onPress={onFinish}>
-          <Text className="text-sm text-[#6B7280]">
-            Already have an account?{" "}
-            <Text className="font-semibold text-[#111111] underline">
-              Log in
+        {isLastSlide ? (
+          <TouchableOpacity className="items-center mt-5" onPress={onAuth}>
+            <Text className="text-sm text-[#6B7280]">
+              Already have an account?{" "}
+              <Text className="font-semibold text-[#F59E0B] underline">
+                Sign in
+              </Text>
             </Text>
-          </Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity className="items-center mt-5" onPress={onFinish}>
+            <Text className="text-sm text-[#6B7280]">
+              Already have an account?{" "}
+              <Text className="font-semibold text-[#111111] underline">
+                Log in
+              </Text>
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );

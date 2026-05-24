@@ -127,6 +127,49 @@ export const tryOnApi = {
     return session;
   },
 
+  async signInWithGoogle() {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        skipBrowserRedirect: true,
+      },
+    });
+    if (error) throw error;
+    return data;
+  },
+
+  async signInWithApple() {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "apple",
+      options: {
+        skipBrowserRedirect: true,
+      },
+    });
+    if (error) throw error;
+    return data;
+  },
+
+  async linkToGoogle() {
+    const { data, error } = await supabase.auth.linkIdentity({
+      provider: "google",
+    });
+    if (error) throw error;
+    return data;
+  },
+
+  async linkToApple() {
+    const { data, error } = await supabase.auth.linkIdentity({
+      provider: "apple",
+    });
+    if (error) throw error;
+    return data;
+  },
+
+  async isAnonymousUser(): Promise<boolean> {
+    const { data: { user } } = await supabase.auth.getUser();
+    return user?.is_anonymous ?? false;
+  },
+
   async signUp(email: string, password: string) {
     const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) throw error;
