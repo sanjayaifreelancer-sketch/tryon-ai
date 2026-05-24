@@ -5,9 +5,9 @@ import { Platform } from "react-native";
 const API_BASE =
   Platform.OS === "web"
     ? "/api/tryon"
-    : "https://bcxyrjdlqnofbqmyixds.supabase.co/functions/v1/api-tryon";
+    : "https://qluwvjfzkyicbxbwumgx.supabase.co/functions/v1/api-tryon";
 const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjeHlyamRscW5vZmJxbXlpeGRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MDQxNzEsImV4cCI6MjA5NDM4MDE3MX0.aKIZp_ESvvc04sMUMvSnD0eom0lS_N8XeK7I6aUxU04";
+  "sb_publishable_mh6WzISPQb6X87Xfiz2j_g_q8CyEG65";
 
 export interface TryOnRequest {
   userImage: string;
